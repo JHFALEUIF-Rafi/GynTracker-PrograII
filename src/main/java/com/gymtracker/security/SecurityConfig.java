@@ -1,5 +1,6 @@
 package com.gymtracker.security;
 
+import com.gymtracker.view.auth.LoginView;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,13 +9,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import com.vaadin.flow.spring.security.VaadinWebSecurity;
 
 /**
  * Spring Security HTTP configuration for authentication and route protection.
  */
 @Configuration
-public class SecurityConfig {
+public class SecurityConfig extends VaadinWebSecurity {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final PasswordEncoder passwordEncoder;
@@ -24,20 +25,11 @@ public class SecurityConfig {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(SecurityConstants.PUBLIC_ROUTES).permitAll()
-                        .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        .loginPage(SecurityConstants.LOGIN_ROUTE)
-                        .permitAll()
-                );
-
-        return http.build();
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable);
+        super.configure(http);
+        setLoginView(http, LoginView.class);
     }
 
     @Bean

@@ -1,0 +1,9 @@
+/* 
+ * GymTracker Theme - Lumo Theme Customization
+ * This file contains custom styles for the application
+ */
+
+:root {
+  --lumo-primary-color: #007bff;
+  --lumo-primary-text-color: #ffffff;
+}
