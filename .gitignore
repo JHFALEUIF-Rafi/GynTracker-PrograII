@@ -7,8 +7,21 @@
 
 *.iml
 .DS_Store
+Thumbs.db
 
 # The following files are generated/updated by vaadin-maven-plugin
 node_modules/
 src/main/frontend/generated/
 vite.generated.ts
+
+# Logs
+logs/
+*.log
+
+# Environment files - never commit real secrets/config, copy from .env.example
+.env
+.env.*
+!.env.example
+
+# Optional per-developer local overrides
+docker-compose.override.yml

@@ -1,0 +1,11 @@
+# Container/production overrides, active when spring.profiles.active=prod
+# (the default used by the Dockerfile/docker-compose.yml).
+vaadin:
+  launch-browser: false
+
+spring:
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false

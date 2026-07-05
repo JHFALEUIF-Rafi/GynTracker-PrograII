@@ -1,30 +1,57 @@
-FROM ghcr.io/jqlang/jq:latest AS jq-stage
+# syntax=docker/dockerfile:1
 
-FROM eclipse-temurin:21-jdk AS build
-COPY --from=jq-stage /jq /usr/bin/jq
-# Test that jq works after copying
-RUN jq --version
+# ---------------------------------------------------------------------------
+# Build stage - compiles the application and packages the runnable jar.
+# Uses the project's own Maven wrapper (mvnw), matching local dev/CI usage.
+# Vaadin has no separate frontend toolchain to install here: this project
+# ships no custom npm dependencies, so the Flow production bundle is
+# resolved automatically as part of the normal Maven build.
+# ---------------------------------------------------------------------------
+FROM eclipse-temurin:21-jdk-alpine AS build
+WORKDIR /workspace
 
-ENV HOME=/app
-RUN mkdir -p $HOME
-WORKDIR $HOME
-COPY . $HOME
+# The project's mvnw (Maven Wrapper 3.x, "only-script" distribution) downloads
+# Maven itself on first run and needs curl/wget + unzip to do so - none of
+# which are present in a bare JDK-alpine image.
+RUN apk add --no-cache curl unzip
 
-# If you have a Vaadin Pro key, pass it as a secret with id "proKey":
-#
-#   $ docker build --secret id=proKey,src=$HOME/.vaadin/proKey .
-#
-# If you have a Vaadin Offline key, pass it as a secret with id "offlineKey":
-#
-#   $ docker build --secret id=offlineKey,src=$HOME/.vaadin/offlineKey .
-
+# Copy only what's needed to resolve dependencies first, so this (expensive,
+# network-bound) layer is cached across rebuilds that only change source code.
+# The cache mount persists the local Maven repo across builds without baking
+# it into any image layer (it never ends up in the final image either way,
+# since only the runtime stage below is kept).
+COPY mvnw pom.xml ./
+COPY .mvn/ .mvn/
+RUN chmod +x mvnw
 RUN --mount=type=cache,target=/root/.m2 \
-    --mount=type=secret,id=proKey \
-    --mount=type=secret,id=offlineKey \
-    sh -c 'PRO_KEY=$(jq -r ".proKey // empty" /run/secrets/proKey 2>/dev/null || echo "") && \
-    OFFLINE_KEY=$(cat /run/secrets/offlineKey 2>/dev/null || echo "") && \
-    ./mvnw clean package -DskipTests -Dvaadin.proKey=${PRO_KEY} -Dvaadin.offlineKey=${OFFLINE_KEY}'
+    ./mvnw -B -q dependency:go-offline || true
 
-FROM eclipse-temurin:21-jre-alpine
-COPY --from=build /app/target/*.jar app.jar
-ENTRYPOINT ["java", "-jar", "/app.jar", "--spring.profiles.active=prod"]
+# Now copy the actual source and build the jar. Tests are skipped here: they
+# run in CI/locally, not as part of the image build.
+COPY src ./src
+RUN --mount=type=cache,target=/root/.m2 \
+    ./mvnw -B -q clean package -DskipTests
+
+# ---------------------------------------------------------------------------
+# Runtime stage - minimal JRE image containing only the built jar.
+# ---------------------------------------------------------------------------
+FROM eclipse-temurin:21-jre-alpine AS runtime
+
+# curl backs the container healthcheck (see docker-compose.yml), which polls
+# the app's already-public "/login" route - no application code change needed.
+RUN apk add --no-cache curl \
+    && addgroup -S gymtracker && adduser -S gymtracker -G gymtracker
+
+WORKDIR /app
+COPY --from=build --chown=gymtracker:gymtracker /workspace/target/*.jar app.jar
+USER gymtracker
+
+# Sensible container defaults; every one of these is overridable at
+# `docker run -e ...` / docker-compose `environment:` time.
+ENV SPRING_PROFILES_ACTIVE=prod \
+    SERVER_PORT=8080 \
+    JAVA_OPTS=""
+
+EXPOSE 8080
+
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

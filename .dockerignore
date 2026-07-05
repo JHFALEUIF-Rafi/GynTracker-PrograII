@@ -1,0 +1,45 @@
+# Build output
+target/
+
+# IDE
+.idea/
+.vscode/
+.settings
+.project
+.classpath
+*.iml
+
+# Version control
+.git/
+.gitignore
+.gitattributes
+
+# CI / editor config - not needed inside the image
+.github/
+.editorconfig
+
+# Logs
+logs/
+*.log
+
+# Vaadin-generated frontend artifacts (rebuilt automatically during the Maven build)
+node_modules/
+src/main/frontend/generated/
+vite.generated.ts
+
+# Environment / secrets - must never be baked into an image
+.env
+.env.*
+!.env.example
+
+# OS noise
+.DS_Store
+
+# Docker files themselves are not needed inside the build context
+docker-compose.yml
+docker-compose.override.yml
+.dockerignore
+
+# Local scratch files
+compile_log.txt
+compile_output.txt

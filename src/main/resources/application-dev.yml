@@ -1,0 +1,11 @@
+# Local-development-only overrides, active when spring.profiles.active=dev
+# (the default - see application.properties).
+vaadin:
+  launch-browser: true
+
+spring:
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true

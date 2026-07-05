@@ -1,0 +1,55 @@
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: gymtracker-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE:-gymtracker}
+    ports:
+      - "${MONGODB_PORT:-27017}:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - gymtracker-network
+
+  gymtracker-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gymtracker-app
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      SERVER_PORT: ${SERVER_PORT:-8080}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+      MONGODB_URI: ${MONGODB_URI:-mongodb://mongodb:27017/gymtracker}
+      MONGODB_DATABASE: ${MONGODB_DATABASE:-gymtracker}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      # Reserved for future use - see .env.example (app is session-based today).
+      JWT_SECRET: ${JWT_SECRET:-}
+    ports:
+      - "${SERVER_PORT:-8080}:${SERVER_PORT:-8080}"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${SERVER_PORT:-8080}/login"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 45s
+    networks:
+      - gymtracker-network
+
+networks:
+  gymtracker-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    name: ${MONGODB_DATA_VOLUME:-gymtracker-mongodb-data}
