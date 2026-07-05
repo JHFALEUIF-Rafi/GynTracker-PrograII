@@ -20,6 +20,7 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -31,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Route(value = "profile", layout = MainLayout.class)
 @PageTitle("My Profile - GymTracker")
+@PermitAll
 public class UserProfileView extends VerticalLayout {
 
     private final UserService userService;

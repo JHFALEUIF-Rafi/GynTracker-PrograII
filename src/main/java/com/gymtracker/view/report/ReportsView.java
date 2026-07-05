@@ -13,6 +13,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 import java.util.Objects;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 @Route(value = "reports", layout = MainLayout.class)
 @PageTitle("Reports - GymTracker")
+@PermitAll
 public class ReportsView extends VerticalLayout implements BeforeEnterObserver {
 
     private final ReportService reportService;

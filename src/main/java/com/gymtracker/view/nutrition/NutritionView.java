@@ -24,6 +24,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -40,6 +41,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Slf4j
 @Route(value = "nutrition", layout = MainLayout.class)
 @PageTitle("Nutrition Plans - GymTracker")
+@PermitAll
 public class NutritionView extends VerticalLayout implements BeforeEnterObserver {
 
     private static final String STATUS_ALL = "All";

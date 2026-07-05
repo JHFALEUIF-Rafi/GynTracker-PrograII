@@ -22,6 +22,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -39,6 +40,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Slf4j
 @Route(value = "mesocycles", layout = MainLayout.class)
 @PageTitle("Mesocycles - GymTracker")
+@PermitAll
 public class MesocycleView extends VerticalLayout implements BeforeEnterObserver {
 
     private final MesocycleService mesocycleService;

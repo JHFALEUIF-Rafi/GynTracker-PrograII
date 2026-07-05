@@ -19,6 +19,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -34,6 +35,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Slf4j
 @Route(value = "nutrition/history", layout = MainLayout.class)
 @PageTitle("Nutrition History - GymTracker")
+@PermitAll
 public class NutritionHistoryView extends VerticalLayout implements BeforeEnterObserver {
 
     private final NutritionPlanService nutritionPlanService;

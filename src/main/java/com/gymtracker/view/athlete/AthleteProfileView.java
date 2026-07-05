@@ -22,6 +22,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 import lombok.extern.slf4j.Slf4j;
 import java.util.Objects;
 import org.springframework.security.core.Authentication;
@@ -37,6 +38,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Slf4j
 @Route(value = "athletes/profile", layout = MainLayout.class)
 @PageTitle("My Profile - GymTracker")
+@PermitAll
 public class AthleteProfileView extends VerticalLayout implements BeforeEnterObserver {
 
     private final AthleteService athleteService;

@@ -84,7 +84,20 @@
       "Bash(curl -s -o /tmp/gymtracker_index2.html -w \"ROOT_STATUS:%{http_code}\\\\n\" http://localhost:8080/)",
       "Bash(curl -s -D - -o /dev/null http://localhost:8080/VAADIN/build/indexhtml-EXOn7HhK.js -w \"JS_STATUS:%{http_code}\\\\n\")",
       "Bash(curl -s -D - -o /dev/null http://localhost:8080/)",
-      "Bash(curl -s -o /tmp/gymtracker_login.html -w \"LOGIN_STATUS:%{http_code} SIZE:%{size_download}\\\\n\" http://localhost:8080/login)"
+      "Bash(curl -s -o /tmp/gymtracker_login.html -w \"LOGIN_STATUS:%{http_code} SIZE:%{size_download}\\\\n\" http://localhost:8080/login)",
+      "Bash(mongosh --version)",
+      "Bash(cygpath -w \"/c/Users/Rafa/.m2/repository/org/springframework/security/spring-security-crypto/6.4.7/spring-security-crypto-6.4.7.jar\")",
+      "Bash(cygpath -w \"/c/Users/Rafa/.m2/repository/commons-logging/commons-logging/1.3.5/commons-logging-1.3.5.jar\")",
+      "Bash(java -cp '.;__TRACKED_VAR__;__TRACKED_VAR__' HashPassword Coach123!)",
+      "Bash('/c/Program Files/MongoDB/mongosh-2.5.2-win32-x64/bin/mongosh' mongodb://localhost:27017/gymtracker --quiet --eval ' *)",
+      "Bash(powershell -Command \"Stop-Process -Id 19608 -Force\")",
+      "Bash(Start-Sleep -Milliseconds 800)",
+      "Bash(powershell -Command \"Get-NetTCPConnection -LocalPort 8080 -ErrorAction SilentlyContinue\")",
+      "Bash(curl -s -c /tmp/gt_cookies.txt -o /dev/null -w \"LOGIN_PAGE:%{http_code}\\\\n\" http://localhost:8080/login)",
+      "Bash(curl -s -b /tmp/gt_cookies.txt -c /tmp/gt_cookies.txt -D - -o /dev/null http://localhost:8080/dashboard)",
+      "Bash(java -cp '.;__TRACKED_VAR__;__TRACKED_VAR__' HashPassword Athlete123!)",
+      "Bash(java -cp '.;__TRACKED_VAR__;__TRACKED_VAR__' HashPassword Nutri123!)",
+      "Bash(\"/c/Program Files/MongoDB/mongosh-2.5.2-win32-x64/bin/mongosh\" \"mongodb://localhost:27017/gymtracker\" --quiet --file \"C:\\\\Users\\\\Rafa\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--gymtracker\\\\01cdc2f3-2554-4ec8-ae2f-6f256a3f714e\\\\scratchpad\\\\seed.js\")"
     ],
     "additionalDirectories": [
       "\\tmp"

@@ -25,6 +25,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Slf4j
 @Route(value = "workouts/history", layout = MainLayout.class)
 @PageTitle("Workout History - GymTracker")
+@PermitAll
 public class WorkoutHistoryView extends VerticalLayout implements BeforeEnterObserver {
 
     private final WorkoutSessionService workoutSessionService;
