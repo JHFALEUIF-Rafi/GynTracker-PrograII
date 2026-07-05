@@ -1,14 +1,16 @@
 package com.gymtracker.view.layout;
 
-import com.vaadin.flow.theme.Theme;
 import org.springframework.stereotype.Component;
 
 /**
  * Lumo theme configuration for GymTracker.
  * Applies custom colors and spacing to the entire application.
+ * <p>
+ * The {@code @Theme} annotation itself lives on {@link AppShellConfig} -
+ * Vaadin requires app-shell annotations on a dedicated
+ * {@code AppShellConfigurator} class, not an arbitrary bean.
  */
 @Component
-@Theme("lumo")
 public class LumoThemeConfig {
 
     public LumoThemeConfig() {

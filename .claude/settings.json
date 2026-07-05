@@ -40,7 +40,9 @@
       "Bash(./mvnw -o clean compile -Dmaven.compiler.showDeprecation=true)",
       "Bash(./mvnw -o clean package -DskipTests)",
       "Bash(./mvnw -o test)",
-      "Bash(command -v docker)"
+      "Bash(command -v docker)",
+      "Bash(./mvnw -q -o clean test)",
+      "Bash(ps -W)"
     ]
   }
 }
